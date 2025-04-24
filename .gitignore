@@ -1,0 +1,12 @@
+# ignore .venv
+.venv/
+
+# # ignore .vscode
+# .vscode/
+
+# ignore json files
+*.json
+
+# ignore pycache
+__pycache__/
+
