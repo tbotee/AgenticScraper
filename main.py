@@ -3,6 +3,9 @@ import json
 import sys
 import os
 from utils.webdriver import setup_webdriver
+from vendors.murata.murata_mpn_search import MurataMPNSearch
+from utils.logger import get_logger
+        
 
 # Import these after candidates create their implementation
 # Replace "example_vendor" with the name of their vendor module
@@ -25,15 +28,9 @@ def search_by_mpn(mpn, headless=True, output_file=None):
     driver = setup_webdriver(headless=headless)
     
     try:
-        # TODO: Replace with your vendor-specific search class
-        # search_engine = ExampleMPNSearch(driver)
-        # results = search_engine.search_by_mpn(mpn)
+        nmpn_search = MurataMPNSearch()
+        results  = nmpn_search.get_products_by_number(mpn)
         
-        # Placeholder for demonstration
-        print(f"Searching for MPN: {mpn}")
-        results = [{"mpn": mpn, "url": "https://example.com/product/123"}]
-        
-        # Save results if output file specified
         if output_file and results:
             with open(output_file, 'w') as f:
                 json.dump(results, f, indent=2)
@@ -222,8 +219,8 @@ def main():
         parser.print_help()
         sys.exit(1)
     
-    # Print results to console
-    print(json.dumps(results, indent=2))
+    logger = get_logger(__name__)
+    logger.info(json.dumps(results, indent=2))
 
 if __name__ == "__main__":
     main()
