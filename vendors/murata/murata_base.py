@@ -79,4 +79,14 @@ class Murata(BaseAPIClient):
             self.logger.error(f"Error getting product categories: {e}")
             return []
         
-
+    def get_filter_parameters(self, filter_labels):
+        filter_labels_list = []
+        for header in filter_labels:
+            # Split by colon and take first two parts
+            parts = header.split(':')
+            if len(parts) >= 2:
+                filter_labels_list.append({
+                    'filter_id': parts[0],
+                    'filter_label': parts[1]
+                })
+        return filter_labels_list

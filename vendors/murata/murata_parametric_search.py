@@ -155,30 +155,107 @@ class MurataParametricSearch(Murata):
         filters = []
 
         if result and 'Result' in result:
-            param_names = list(parameters.keys())
-            filter_ids = self._get_filter_ids(result['Result']['header'], param_names)
-            # Loop through the filter IDs from the cache
-            
-            for filter_info in filter_ids['filters']:
-                filter_id = filter_info["filter_id"]
-                filter_label = filter_info["filter_label"]
 
-                if filter_label in parameters:
-                    param_value = parameters[filter_label]
-                    if isinstance(param_value, dict) and 'min' in param_value and 'max' in param_value:
-                        filters.append(f"{filter_id};{param_value['min']}|{param_value['max']}")
-                    else:
-                        possile_selectable_values = self._get_possible_selectable_values(filter_id, result['Result']['listdata'])
-                        if possile_selectable_values:    
-                            most_likely_value = self._get_most_likely_value(possile_selectable_values, param_value)
+            # check for parameters is string or json
+            if 'details' in parameters:
+                # python main.py parametric --category "Capacitors" --subcategory 
+                # "Ceramic Capacitors(SMD)" --parameters '{"details": "the dc rated voltage should be in the range of 100-200 and the capacitance no more than 10"}' 
+                # --max-results 10 --output results_parametric.json --api-key
+
+
+                filter_parameters = self.get_filter_parameters(result['Result']['header'])
+                filters_by_llm = self._generate_filter_by_llm(filter_parameters, parameters['details'])
+                if filters_by_llm:
+                    for filter in filters_by_llm['filters']:
+                        if isinstance(filter, dict) and ('min' in filter or 'max' in filter): 
+                            f = f"{filter['filter_id']};{filter.get('min', '')}|{filter.get('max', '')}"
+                            filters.append(f)
+
+                        if isinstance(filter, dict) and 'value' in filter : 
+                            possile_selectable_values = self._get_possible_selectable_values(filter['filter_id'], result['Result']['listdata'])
+                            most_likely_value = self._get_most_likely_value(possile_selectable_values, filter['filter_id'])
                             if most_likely_value != "None":
-                                filters.append(f"{filter_id};{most_likely_value}")
+                                filters.append(f"{filter['filter_id']};{most_likely_value}")
+                self.logger.info(f"Filters from the llm: {filters}")
+            else:
+                param_names = list(parameters.keys())
+                filter_ids = self._get_filter_ids(result['Result']['header'], param_names)
+                
+                for filter_info in filter_ids['filters']:
+                    filter_id = filter_info["filter_id"]
+                    filter_label = filter_info["filter_label"]
+
+                    if filter_label in parameters:
+                        param_value = parameters[filter_label]
+                        if isinstance(param_value, dict) and 'min' in param_value and 'max' in param_value:
+                            filters.append(f"{filter_id};{param_value['min']}|{param_value['max']}")
+                        else:
+                            possile_selectable_values = self._get_possible_selectable_values(filter_id, result['Result']['listdata'])
+                            if possile_selectable_values:    
+                                most_likely_value = self._get_most_likely_value(possile_selectable_values, param_value)
+                                if most_likely_value != "None":
+                                    filters.append(f"{filter_id};{most_likely_value}")
                         
                         
             self.logger.info(f"Formatted filters from the arguments: {filters}")
         
         return filters
 
+    @cache_json_result(cache_dir="llm_cache")
+    def _generate_filter_by_llm(self, filter_parameters, details):
+        """
+        Generate the filter for the given parameters and category id.
+        """
+        prompt = f"""
+            Here are the possible filter ids: {json.dumps(filter_parameters, indent=2)}. Each filter id has a label.
+            Generate as many filters as the following prompt: '{details}'. Note that there are multiple filters.
+
+            If you detect that one of the filters is a range filter (legth and width are not range filters: 0.1x0.25 is a single value filter), add these format to the result list:
+            [
+                {{
+                    "filter_id": "filter_id",
+                    "min": "filter_min",
+                    "max": "filter_max",
+                }},
+                ...
+            ]
+
+            If you detect that one of the filterst is a range but only one value is provided (like the maximum or minimum value) leave the other empty and add the following format to the result list:
+            [
+                {{
+                    "filter_id": "filter_id",
+                    "min": "filter_min" or "",
+                    "max": "filter_max" or "",
+                }},
+                ...
+            ]
+
+            If you detect that it is a single value add these format to the result list:
+            [
+                {{
+                    "filter_id": "filter_id",
+                    "value": "filter_value",
+                }},
+                ...
+            ]
+
+            So the final result shoudl be: 
+            {{
+                "filters": [
+                    .... put all the filters here
+                ]
+            }}
+
+            Return your answer as a JSON list with all the filter options.
+         """
+
+        result = self.llm_helper.genericQuestion(prompt)
+        if result:
+            try:
+                filter_value = json.loads(result)
+                return filter_value
+            except:
+                self.logger.error(f"Failed to parse result: {result}")
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_most_likely_value(self, possile_selectable_values, value_to_filter):
@@ -222,15 +299,7 @@ class MurataParametricSearch(Murata):
 
         self.logger.info(f"Getting filter ids for {param_names}")
 
-        filter_labels_list = []
-        for header in filter_labels:
-            # Split by colon and take first two parts
-            parts = header.split(':')
-            if len(parts) >= 2:
-                filter_labels_list.append({
-                    'filter_id': parts[0],
-                    'filter_label': parts[1]
-                })
+        filter_labels_list = self.get_filter_parameters(filter_labels)
 
         prompt = f"""
             Get the most likely filter_id for the following filter labels: {json.dumps(param_names, indent=2)} from the following result list:
