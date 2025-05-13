@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from typing import List, Dict, Any, Optional
+from utils.logger import get_logger
 
 class LLMHelper:
     """Helper class for LLM-based decision making."""
@@ -17,6 +18,8 @@ class LLMHelper:
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY")
         if not self.api_key:
             print("Warning: No API key provided for LLM. Some features may not work.")
+
+        self.logger = get_logger(self.__class__.__name__)
     
     def determine_category_path(self, mpn: str, available_categories: List[str]) -> List[str]:
         """
@@ -158,6 +161,42 @@ class LLMHelper:
             print(f"Error in LLM parameter identification: {e}")
             return None
     
+    def genericQuestion(self, prompt: str) -> str:
+        """
+        Use LLM to generate a response based on the provided prompt.
+
+        Args:
+            prompt (str): The question to generate a response for
+
+        Returns:
+            str: The generated answer
+        """
+        if not self.api_key:
+            return None
+
+                
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}"
+            },
+            json={
+                "model": "gpt-3.5-turbo",  # or your preferred model
+                "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"}
+            }
+        )
+
+        if response.status_code == 200:
+            result = response.json()
+            return result["choices"][0]["message"]["content"].strip()
+        else:
+            self.logger.error(f"Error in LLM API call: {response.text}")
+            self.logger.error(f"Error in LLM response: {response.status_code}")
+            return None
+            
+
     def _fallback_category_path(self, mpn: str) -> List[str]:
         """
         Provide a fallback category path based on simple heuristics.

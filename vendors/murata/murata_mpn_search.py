@@ -1,9 +1,9 @@
 from utils.base_api_client import BaseAPIClient
 from utils.mpn_base import MPNBase
+from vendors.murata.murata_base import Murata
 
 
-
-class MurataMPNSearch(BaseAPIClient, MPNBase):
+class MurataMPNSearch(BaseAPIClient, MPNBase, Murata):
     @property
     def base_url(self):
         return "https://www.murata.com/webapi/"
@@ -18,14 +18,14 @@ class MurataMPNSearch(BaseAPIClient, MPNBase):
         """
         try:
             self.logger.info(f"Getting products information for part number: {number}")
-            category_id = self.get_product_category_by_id(number)
-            results  = self.get_products_details(category_id, number)
+            category_id = self._get_product_category_by_id(number)
+            results  = self._get_products_details(category_id, number)
             return results
         except Exception as e:
             self.logger.error(f"Error getting product information for part number: {number} in category: {category_id}: {e} ")
             return None
 
-    def get_product_category_by_id(self, number: str) -> str:
+    def _get_product_category_by_id(self, number: str) -> str:
         """
         Get the product category by ID
         Args:
@@ -49,7 +49,7 @@ class MurataMPNSearch(BaseAPIClient, MPNBase):
             self.logger.error(f"No category ID found for the given part number: {number}")
             raise Exception("No category ID found for the given part number")
 
-    def get_products_details(self, category_id: str, number: str) -> list:
+    def _get_products_details(self, category_id: str, number: str) -> list:
         """
         Get products with details by category ID and part number
 
@@ -69,28 +69,11 @@ class MurataMPNSearch(BaseAPIClient, MPNBase):
             'stype': 2
         })
 
-        if not result or 'Result' not in result or 'header' not in result['Result'] or 'data' not in result['Result']:
-            self.logger.error(f"Invalid response format for part number: {number}")
-            return None
+        all_product_details = self.format_product_details(result)
 
-        headers = [h.split(':')[0] for h in result['Result']['header']]
-        products = result['Result']['data']['products']
-
-        all_product_details = []
-        
-        for product in products:
-            values = product['Value']
-            product_details = {}
-            for header, value in zip(headers, values):
-                key = header.split(':')[0]
-                product_details[key] = value
-
-            formatted_result = {
-                "mpn": product_details.get("partnumber", ""),
-                "url": f"https://www.murata.com/en-us/products/productdetail?partno={product_details.get('partnumber', '')}",
-                "details": product_details
-            }
-            all_product_details.append(formatted_result)
+        if not all_product_details:
+            self.logger.error(f"No product details found for part number: {number}")
+            return []
 
         self.logger.info(f"Successfully retrieved details for {len(all_product_details)} products with part number: {number}")
         

@@ -5,6 +5,7 @@ import os
 from utils.webdriver import setup_webdriver
 from vendors.murata.murata_mpn_search import MurataMPNSearch
 from utils.logger import get_logger
+from vendors.murata.murata_parametric_search import MurataParametricSearch
         
 
 # Import these after candidates create their implementation
@@ -28,8 +29,8 @@ def search_by_mpn(mpn, headless=True, output_file=None):
     driver = setup_webdriver(headless=headless)
     
     try:
-        nmpn_search = MurataMPNSearch()
-        results  = nmpn_search.get_products_by_number(mpn)
+        mpn_search = MurataMPNSearch()
+        results  = mpn_search.get_products_by_number(mpn)
         
         if output_file and results:
             with open(output_file, 'w') as f:
@@ -66,18 +67,21 @@ def search_by_parameters(category, subcategory=None, parameters=None, max_result
         # TODO: Replace with your vendor-specific search class
         # search_engine = ExampleParametricSearch(driver)
         # results = search_engine.search_by_parameters(category, subcategory, parameters, max_results)
+
+        parametric_search = MurataParametricSearch(driver)
+        results = parametric_search.search_by_parameters(category, subcategory, parameters, max_results)
         
-        # Placeholder for demonstration
-        print(f"Searching in category: {category}, subcategory: {subcategory}")
-        print(f"Parameters: {parameters}")
-        results = [
-            {"mpn": "SAMPLE-001", "url": "https://example.com/product/001", 
-             "specifications": {"capacitance": "1.0 µF", "voltage": "50V"}},
-            {"mpn": "SAMPLE-002", "url": "https://example.com/product/002",
-             "specifications": {"capacitance": "1.1 µF", "voltage": "50V"}}
-        ]
+        # # # Placeholder for demonstration
+        # # print(f"Searching in category: {category}, subcategory: {subcategory}")
+        # # print(f"Parameters: {parameters}")
+        # results = [
+        #     {"mpn": "SAMPLE-001", "url": "https://example.com/product/001", 
+        #      "specifications": {"capacitance": "1.0 µF", "voltage": "50V"}},
+        #     {"mpn": "SAMPLE-002", "url": "https://example.com/product/002",
+        #      "specifications": {"capacitance": "1.1 µF", "voltage": "50V"}}
+        # ]
         
-        # Save results if output file specified
+        # # Save results if output file specified
         if output_file and results:
             with open(output_file, 'w') as f:
                 json.dump(results, f, indent=2)
