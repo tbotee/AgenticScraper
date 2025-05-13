@@ -158,8 +158,8 @@ class MurataParametricSearch(Murata):
 
             # check for parameters is string or json
             if 'details' in parameters:
-                # python main.py parametric --category "Capacitors" --subcategory 
-                # "Ceramic Capacitors(SMD)" --parameters '{"details": "the dc rated voltage should be in the range of 100-200 and the capacitance no more than 10"}' 
+                # python main.py parametric --category "Capacitors" --subcategory "Single Layer Microchip Capacitors" 
+                # --parameters '{"details": "the capacitance shuld be between 0.1 and 1 and LxW 0.25x0.25"}'
                 # --max-results 10 --output results_parametric.json --api-key
 
 
@@ -173,10 +173,11 @@ class MurataParametricSearch(Murata):
 
                         if isinstance(filter, dict) and 'value' in filter : 
                             possile_selectable_values = self._get_possible_selectable_values(filter['filter_id'], result['Result']['listdata'])
-                            most_likely_value = self._get_most_likely_value(possile_selectable_values, filter['filter_id'])
+                            most_likely_value = self._get_most_likely_value(possile_selectable_values, filter['value'])
                             if most_likely_value != "None":
                                 filters.append(f"{filter['filter_id']};{most_likely_value}")
-                self.logger.info(f"Filters from the llm: {filters}")
+                            else: 
+                                self.logger.info(f"No most likely value found for {filter['value']}")
             else:
                 param_names = list(parameters.keys())
                 filter_ids = self._get_filter_ids(result['Result']['header'], param_names)
@@ -195,6 +196,8 @@ class MurataParametricSearch(Murata):
                                 most_likely_value = self._get_most_likely_value(possile_selectable_values, param_value)
                                 if most_likely_value != "None":
                                     filters.append(f"{filter_id};{most_likely_value}")
+                                else: 
+                                    self.logger.info(f"No most likely value found for {param_value}")
                         
                         
             self.logger.info(f"Formatted filters from the arguments: {filters}")
@@ -259,6 +262,8 @@ class MurataParametricSearch(Murata):
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_most_likely_value(self, possile_selectable_values, value_to_filter):
+
+        self.logger.info(f"Getting the most likely value for {value_to_filter} from {possile_selectable_values}")
 
         prompt = f"""
             Get the most likely filter value  for "{value_to_filter}" from following list: {json.dumps(possile_selectable_values, indent=2)} 
