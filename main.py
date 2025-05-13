@@ -6,6 +6,7 @@ from utils.webdriver import setup_webdriver
 from vendors.murata.murata_mpn_search import MurataMPNSearch
 from utils.logger import get_logger
 from vendors.murata.murata_parametric_search import MurataParametricSearch
+from vendors.murata.murata_xref_search import MurataXrefSearch
         
 
 # Import these after candidates create their implementation
@@ -68,18 +69,8 @@ def search_by_parameters(category, subcategory=None, parameters=None, max_result
         # search_engine = ExampleParametricSearch(driver)
         # results = search_engine.search_by_parameters(category, subcategory, parameters, max_results)
 
-        parametric_search = MurataParametricSearch(driver)
+        parametric_search = MurataParametricSearch()
         results = parametric_search.search_by_parameters(category, subcategory, parameters, max_results)
-        
-        # # # Placeholder for demonstration
-        # # print(f"Searching in category: {category}, subcategory: {subcategory}")
-        # # print(f"Parameters: {parameters}")
-        # results = [
-        #     {"mpn": "SAMPLE-001", "url": "https://example.com/product/001", 
-        #      "specifications": {"capacitance": "1.0 µF", "voltage": "50V"}},
-        #     {"mpn": "SAMPLE-002", "url": "https://example.com/product/002",
-        #      "specifications": {"capacitance": "1.1 µF", "voltage": "50V"}}
-        # ]
         
         # # Save results if output file specified
         if output_file and results:
@@ -112,20 +103,12 @@ def search_by_cross_reference(competitor_mpn, category_path=None, headless=True,
         os.environ["OPENAI_API_KEY"] = api_key
     
     try:
-        # TODO: Replace with your vendor-specific search class
-        # search_engine = ExampleCrossReferenceSearch(driver)
-        # results = search_engine.search_by_cross_reference(competitor_mpn, category_path)
+        xref_search = MurataXrefSearch()
+        results = xref_search.search_by_cross_reference(competitor_mpn, category_path)
         
         # Placeholder for demonstration
-        print(f"Searching for cross-reference to competitor MPN: {competitor_mpn}")
         if category_path:
             print(f"Category path: {' > '.join(category_path)}")
-        results = [
-            {"mpn": "EQUIVALENT-001", "url": "https://example.com/product/eq001", 
-             "competitor_mpn": competitor_mpn},
-            {"mpn": "EQUIVALENT-002", "url": "https://example.com/product/eq002",
-             "competitor_mpn": competitor_mpn}
-        ]
         
         # Save results if output file specified
         if output_file and results:

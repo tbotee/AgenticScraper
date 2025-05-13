@@ -6,19 +6,15 @@ from utils.llm_helper import LLMHelper
 import json
 from vendors.murata.murata_base import Murata
 
-class MurataParametricSearch(BaseAPIClient, Murata):
+class MurataParametricSearch(Murata):
     @property
     def base_url(self):
         return "https://www.murata.com/webapi/"
 
-    def __init__(self, driver):
+    def __init__(self):
         """
         Initialize the search engine with a WebDriver instance.
-        
-        Args:
-            driver: Selenium WebDriver instance
         """
-        self.driver = driver
         self.llm_helper = LLMHelper()
         super().__init__()
     
@@ -45,7 +41,7 @@ class MurataParametricSearch(BaseAPIClient, Murata):
         self.logger.info(f"Searching for products in category: {category}, "
                         f"subcategory: {subcategory} with parameters: {parameters}")
         
-        categories = self._get_product_categories_from_the_category_tree()
+        categories = self.get_product_categories_from_the_category_tree()
 
         category_id = self._get_category_id_from_llm_according_to_the_parameter(categories, category, subcategory)
 
@@ -211,52 +207,6 @@ class MurataParametricSearch(BaseAPIClient, Murata):
             items = listdata[filter_id]
             return [item.split(":")[1] for item in items]
         return []
-    
-    @cache_json_result(cache_dir="llm_cache")
-    def _get_product_categories_from_the_category_tree(self):
-        """
-        Get the product categories from the Murata navigation API.
-        
-        Returns:
-            list: List of product category dictionaries
-        """
-        try:
-            self.logger.info(f"Getting product categories")
-            nav_data = self.get('GetCategoryRest', {
-                'lang': 'en-us'
-            })
-            
-            if not nav_data or 'categories' not in nav_data:
-                self.logger.error("Invalid navigation data response")
-                return []
-            
-            def simplify_category(category):
-                simplified = {
-                    "name": category['name'],
-                    "category_id": category['category_id'],
-                    "children": []
-                }
-                
-                if 'children' in category:
-                    simplified['children'] = [
-                        simplify_category(child) 
-                        for child in category['children']
-                    ]
-                    
-                return simplified
-            
-            nav_data['categories'] = [
-                simplify_category(category)
-                for category in nav_data['categories']
-            ]
-                
-            return nav_data['categories']
-            
-            
-        except Exception as e:
-            self.logger.error(f"Error getting product categories: {e}")
-            return []
-        1
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_filter_ids(self, filter_labels, param_names) -> dict:

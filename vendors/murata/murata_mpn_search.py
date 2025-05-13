@@ -3,7 +3,7 @@ from utils.mpn_base import MPNBase
 from vendors.murata.murata_base import Murata
 
 
-class MurataMPNSearch(BaseAPIClient, MPNBase, Murata):
+class MurataMPNSearch(MPNBase, Murata):
     @property
     def base_url(self):
         return "https://www.murata.com/webapi/"
