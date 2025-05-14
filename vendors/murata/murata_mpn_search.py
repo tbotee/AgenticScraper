@@ -21,7 +21,7 @@ class MurataMPNSearch(MPNBase, Murata):
             results  = self._get_products_details(category_id, number)
             return results
         except Exception as e:
-            self.logger.error(f"Error getting product information for part number: {number} in category: {category_id}: {e} ")
+            self.logger.error(str(e))
             return None
 
     def _get_product_category_by_id(self, number: str) -> str:
@@ -71,8 +71,7 @@ class MurataMPNSearch(MPNBase, Murata):
         all_product_details = self.format_product_details(result)
 
         if not all_product_details:
-            self.logger.error(f"No product details found for part number: {number}")
-            return []
+            raise Exception(f"No product details found for part number: {number}")
 
         self.logger.info(f"Successfully retrieved details for {len(all_product_details)} products with part number: {number}")
         
