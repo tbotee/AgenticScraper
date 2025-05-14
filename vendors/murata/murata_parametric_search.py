@@ -91,6 +91,22 @@ class MurataParametricSearch(ParametricBase, Murata):
             raise Exception(f"No category id found for {category} and {subcategory}")
 
         return category_id
+    
+    def _get_possible_selectable_values(self, filter_id, listdata):
+        """
+        Get the possible selectable values for the given filter id.
+
+        Args:
+            filter_id (str): The filter id
+            listdata (dict): The list data
+
+        Returns:
+            list: The possible selectable values
+        """
+        if filter_id in listdata:
+            items = listdata[filter_id]
+            return [item.split(":")[1] for item in items]
+        return []
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_category_id_from_llm_according_to_the_parameter(self, categories, category, subcategory=None):
@@ -228,34 +244,35 @@ class MurataParametricSearch(ParametricBase, Murata):
             Here are the possible filter ids: {json.dumps(filter_parameters, indent=2)}. Each filter id has a label.
             Generate as many filters as the following prompt: '{details}'. Note that there are multiple filters.
 
-            If you detect that one of the filters is a range filter (legth and width are not range filters: 0.1x0.25 is a single value filter), add these format to the result list:
-            [
+            If you detect that one of the filters is a range filter (size with Legth X Width is not range filters), use this template:
+            '[
                 {{
                     "filter_id": "filter_id",
                     "min": "filter_min",
                     "max": "filter_max",
                 }},
                 ...
-            ]
+            ]'
 
-            If you detect that one of the filterst is a range but only one value is provided (like the maximum or minimum value) leave the other empty and add the following format to the result list:
-            [
+            If you detect that one of the filterst is a range but only one value is provided (like the maximum or minimum value) leave the other empty 
+            and use the following temoplate:
+            '[
                 {{
                     "filter_id": "filter_id",
-                    "min": "filter_min" or "",
-                    "max": "filter_max" or "",
+                    "min": "filter_min" or use empty here if the minimum value is not provided,
+                    "max": "filter_max" or use empty here if the maximum value is not provided ,
                 }},
                 ...
-            ]
+            ]'
 
-            If you detect that it is a single value add these format to the result list:
-            [
+            If you detect that the filter is a single value filter use this template (size with Legth X Width is single value filters):
+            '[
                 {{
                     "filter_id": "filter_id",
                     "value": "filter_value",
                 }},
                 ...
-            ]
+            ]'
 
             So the final result shoudl be: 
             {{
@@ -295,15 +312,6 @@ class MurataParametricSearch(ParametricBase, Murata):
                 return filter_value['filter_value']
             except:
                 self.logger.error(f"Failed to parse result: {result}")
-
-    def _get_possible_selectable_values(self, filter_id, listdata):
-        """
-        Get the possible selectable values for the given filter id.
-        """
-        if filter_id in listdata:
-            items = listdata[filter_id]
-            return [item.split(":")[1] for item in items]
-        return []
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_filter_ids(self, filter_labels, param_names) -> dict:
