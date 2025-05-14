@@ -34,7 +34,7 @@ class Murata(BaseAPIClient):
 
 
     @cache_json_result(cache_dir="llm_cache")
-    def get_product_categories_from_the_category_tree(self):
+    def get_product_categories_from_the_category_tree(self) -> list:
         """
         Get the product categories from the Murata navigation API.
         

@@ -4,9 +4,10 @@ from utils.base_api_client import BaseAPIClient
 from utils.cache_helper import cache_json_result
 from utils.llm_helper import LLMHelper
 import json
+from utils.parametric_base import ParametricBase
 from vendors.murata.murata_base import Murata
 
-class MurataParametricSearch(Murata):
+class MurataParametricSearch(ParametricBase, Murata):
     @property
     def base_url(self):
         return "https://www.murata.com/webapi/"
@@ -28,7 +29,7 @@ class MurataParametricSearch(Murata):
             subcategory (str, optional): Subcategory name
             parameters (dict, optional): Parameters to filter by
                 Format: {
-                    "parameter_name": value,  # For single values
+                    "details": value,  # For single values
                     "parameter_name": {"min": min_val, "max": max_val},  # For ranges
                     "parameter_name": [val1, val2, ...]  # For multiple checkbox values
                 }
@@ -41,14 +42,26 @@ class MurataParametricSearch(Murata):
         self.logger.info(f"Searching for products in category: {category}, "
                         f"subcategory: {subcategory} with parameters: {parameters}")
         
-        categories = self.get_product_categories_from_the_category_tree()
-
-        category_id = self._get_category_id_from_llm_according_to_the_parameter(categories, category, subcategory)
-
-        if category_id == "None":
-            self.logger.warning(f"No category id found for {category} and {subcategory}")
+        try:
+            category_id = self._get_category_id(category, subcategory)
+            arguments = self._get_arguments(category_id, parameters, category)
+            all_product_details = self._fetch_product_details(arguments, max_results, category, subcategory)
+            return all_product_details
+        except Exception as e:
+            self.logger.error(str(e))
             return []
+    
+    def _fetch_product_details(self, arguments, max_results, category, subcategory) -> list:
+        result = self.get('PsdispRest', arguments)
+
+        all_product_details = self.format_product_details(result, max_results)
+
+        if not all_product_details:
+            raise Exception(f"No product details found for {category} and {subcategory}")
         
+        return all_product_details
+
+    def _get_arguments(self, category_id, parameters, category) -> dict:
         arguments = {
             'cate': category_id,
             'stype': 2,
@@ -60,15 +73,20 @@ class MurataParametricSearch(Murata):
             if isinstance(filters, list) and filters:
                 arguments['scon'] = filters
 
-        result = self.get('PsdispRest', arguments)
+        if parameters and not arguments.get('scon'):
+            raise Exception(f"Parameters provided but no valid filters could be determined for category {category}")
+        
+        return arguments
+    
+    def _get_category_id(self, category, subcategory) -> str:
+        categories_from_the_website = self.get_product_categories_from_the_category_tree()
 
-        all_product_details = self.format_product_details(result, max_results)
+        category_id = self._get_category_id_from_llm_according_to_the_parameter(categories_from_the_website, category, subcategory)
 
-        if not all_product_details:
-            self.logger.error(f"No product details found for {category} and {subcategory}")
-            return []
+        if category_id == "None":
+            raise Exception(f"No category id found for {category} and {subcategory}")
 
-        return all_product_details
+        return category_id
 
     @cache_json_result(cache_dir="llm_cache")
     def _get_category_id_from_llm_according_to_the_parameter(self, categories, category, subcategory=None):
@@ -129,9 +147,9 @@ class MurataParametricSearch(Murata):
                 self.logger.error(f"Failed to parse category ID from LLM response: {result}")
                 return None
         return None
+
     
-    
-    def _determine_filters(self, parameters, category_id):
+    def _determine_filters(self, parameters, category_id) -> list:
         """
         Determine the filters for the given parameters and category id.
 
