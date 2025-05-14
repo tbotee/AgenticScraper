@@ -27,29 +27,30 @@ class MurataXrefSearch(XrefBase, Murata):
         """
         self.logger.info(f"Searching for cross-reference to competitor MPN {competitor_mpn}: {category_path}")
 
-        xrefcategory_id = self._get_xref_category(category_path)
-        if (xrefcategory_id == "None"):
-            self.logger.warning(f"No cross-reference category id found for {category_path}")
+        try:
+            xrefcategory_id = self._get_xref_category(category_path)
+            return self._fetch_product_details(xrefcategory_id, competitor_mpn)
+        except Exception as e:
+            self.logger.error(str(e))
             return []
         
+
+    def _fetch_product_details(self, xrefcategory_id, competitor_mpn) -> list:
         arguments = {
             'cate': xrefcategory_id,
             'partno': competitor_mpn,
             'lang': 'en-us'
         }
-
         result = self.get('SearchCrossReference', arguments)
 
         if 'murataPsDispRest' in result:
             all_product_details = self.format_product_details(result['murataPsDispRest'])
-            if not all_product_details:
-                self.logger.error(f"No product details found for competitor MPN {competitor_mpn}")
-                return []
-            return all_product_details
-        self.logger.error(f"No product details found for competitor MPN {competitor_mpn}")
-        return []
+            if all_product_details:
+                return all_product_details
+        
+        raise Exception(f"No product details found for competitor MPN {competitor_mpn}")    
 
-    def _get_xref_category(self, category_path):
+    def _get_xref_category(self, category_path) -> str:
         """
         Get the cross-reference category from the category tree.
 
@@ -65,10 +66,13 @@ class MurataXrefSearch(XrefBase, Murata):
 
         xrefcategory = self._get_xrefcategory_id_from_llm_according_to_the_parameter(categories, category_path)
 
+        if (xrefcategory == "None"):
+            raise Exception(f"No cross-reference category id found for {category_path}")
+
         self.logger.info(f"Cross-reference category id: {xrefcategory}")
 
         return xrefcategory
-    
+
     @cache_json_result(cache_dir="llm_cache")
     def _get_xrefcategory_id_from_llm_according_to_the_parameter(self, categories, category_path) -> str:
         """
@@ -106,14 +110,11 @@ class MurataXrefSearch(XrefBase, Murata):
             Return your answer as a JSON. If no match is found, return {{"xrefcategory_id", "None"}}.
             For example: {{"xrefcategory_id", "dgs1288sKXZK"]}}
             """
-        
 
         result = self.llm_helper.genericQuestion(prompt)
         if result:
             try:
                 result = json.loads(result)
-                self.logger.info(f"Llmm category id result: {result['xrefcategory_id']}")
-
                 return result["xrefcategory_id"]
             except:
                 self.logger.error(f"Failed to parse category ID from LLM response: {result}")
