@@ -37,6 +37,10 @@ class MurataParametricSearch(ParametricBase, Murata):
                 
         Returns:
             list: List of dictionaries with product information
+
+        Runs with the command:
+            python main.py parametric --category "Capacitors" --subcategory "Single Layer Microchip Capacitors" 
+                --parameters '{"details": "the capacitance shuld be between 0.1 and 1 and LxW 0.25x0.25"}' --max-results 10 --output results_parametric.json --api-key
         """
 
         self.logger.info(f"Searching for products in category: {category}, "
