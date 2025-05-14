@@ -14,6 +14,9 @@ class MurataMPNSearch(MPNBase, Murata):
 
         Returns: 
             list: A list of dictionaries with product information
+
+        Runs with the command:
+            python main.py mpn LQP02HQ0N2BZ2 --output results_mpn.json
         """
         try:
             self.logger.info(f"Getting products information for part number: {number}")
