@@ -177,14 +177,7 @@ class MurataParametricSearch(ParametricBase, Murata):
         filters = []
 
         if result and 'Result' in result:
-
-            # check for parameters is string or json
             if 'details' in parameters:
-                # python main.py parametric --category "Capacitors" --subcategory "Single Layer Microchip Capacitors" 
-                # --parameters '{"details": "the capacitance shuld be between 0.1 and 1 and LxW 0.25x0.25"}'
-                # --max-results 10 --output results_parametric.json --api-key
-
-
                 filter_parameters = self.get_filter_parameters(result['Result']['header'])
                 filters_by_llm = self._generate_filter_by_llm(filter_parameters, parameters['details'])
                 if filters_by_llm:
@@ -210,8 +203,8 @@ class MurataParametricSearch(ParametricBase, Murata):
 
                     if filter_label in parameters:
                         param_value = parameters[filter_label]
-                        if isinstance(param_value, dict) and 'min' in param_value and 'max' in param_value:
-                            filters.append(f"{filter_id};{param_value['min']}|{param_value['max']}")
+                        if isinstance(param_value, dict) and ('min' in param_value or 'max' in param_value):
+                            filters.append(f"{filter_id};{param_value.get('min'), ''}|{param_value.get('max', '')}")
                         else:
                             possile_selectable_values = self._get_possible_selectable_values(filter_id, result['Result']['listdata'])
                             if possile_selectable_values:    
