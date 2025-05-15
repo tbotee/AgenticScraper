@@ -1,4 +1,5 @@
 
+import os
 import requests
 
 class BaseAPIClient:
@@ -41,6 +42,14 @@ class BaseAPIClient:
         url = self.base_url + endpoint
         try:
             response = requests.get(url, headers=self.default_headers(), params=params)
+            if os.getenv('USE_PROXY') == 'true':
+                proxies = {
+                    'http': os.getenv('HTTP_PROXY'),
+                    'https': os.getenv('HTTPS_PROXY')
+                }
+                response = requests.get(url, headers=self.default_headers(), params=params, proxies=proxies)
+            else:
+                response = requests.get(url, headers=self.default_headers(), params=params)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
