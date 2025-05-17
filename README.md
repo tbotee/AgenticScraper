@@ -14,6 +14,11 @@ Make sure to use $OPENAI_API_KEY for the parametric and xref search
 
 # Scope of Work: Electronic Component Agentic Scraper Development
 
+# Enhancements
+- better llm
+- more specific llm prompts
+- better caching for debugging purpose
+
 ## Project Background and Purpose
 
 Electronic component sourcing is a critical challenge for hardware companies. Engineers and operations teams frequently need to find alternative components that meet specific technical requirements for various reasons:
