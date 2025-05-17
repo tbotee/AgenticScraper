@@ -238,7 +238,7 @@ class MurataParametricSearch(ParametricBase, Murata):
         """
         prompt = f"""
             Here are the possible filter ids: {json.dumps(filter_parameters, indent=2)}. Each filter id has a label.
-            Generate as many filters as the following prompt: '{details}'. Note that there are multiple filters.
+            Generate as many filters as the following prompt: '{details}'. Note that there are multiple filters. Each filter is should be present one time in the final result.
             
             If there is somethong like "no more then, or less then, or maximum x or minimum x" then that's a range filter. If only one value is provided for a range filter, then add the orher one with an empty string.
 
