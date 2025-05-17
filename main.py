@@ -7,7 +7,6 @@ from vendors.murata.murata_mpn_search import MurataMPNSearch
 from utils.logger import get_logger
 from vendors.murata.murata_parametric_search import MurataParametricSearch
 from vendors.murata.murata_xref_search import MurataXrefSearch
-        
 
 # Import these after candidates create their implementation
 # Replace "example_vendor" with the name of their vendor module
@@ -63,6 +62,10 @@ def search_by_parameters(category, subcategory=None, parameters=None, max_result
     # Set API key in environment if provided
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
+    else:
+        logger = get_logger(__name__)
+        logger.error("No API key provided for LLM. Some features may not work. Exiting...")
+        sys.exit(1)
     
     try:
         # TODO: Replace with your vendor-specific search class
@@ -101,6 +104,10 @@ def search_by_cross_reference(competitor_mpn, category_path=None, headless=True,
     # Set API key in environment if provided
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
+    else:
+        logger = get_logger(__name__)
+        logger.error("No API key provided for LLM. Some features may not work. Exiting...")
+        sys.exit(1)
     
     try:
         xref_search = MurataXrefSearch()

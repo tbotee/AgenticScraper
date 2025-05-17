@@ -23,11 +23,7 @@ class MurataXrefSearch(XrefBase, Murata):
             category_path (list, optional): List of category names
 
         Returns:
-            list: List of dictionaries with product information
-
-        Runs with the command:
-            python main.py xref 337XMPL002MG28A --category-path '["Capacitors", "Polymer Aluminium Electrolytic Capacitors"]' 
-                --output results_xref.json --api-key
+            list: List of dictionaries with product information           
         """
         self.logger.info(f"Searching for cross-reference to competitor MPN {competitor_mpn}: {category_path}")
 
