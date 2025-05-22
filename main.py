@@ -7,6 +7,7 @@ from vendors.murata.murata_mpn_search import MurataMPNSearch
 from utils.logger import get_logger
 from vendors.murata.murata_parametric_search import MurataParametricSearch
 from vendors.murata.murata_xref_search import MurataXrefSearch
+from vendors.tdk.tdk_mpn_search import TdkMpnSearch
 
 # Import these after candidates create their implementation
 # Replace "example_vendor" with the name of their vendor module
@@ -29,7 +30,7 @@ def search_by_mpn(mpn, headless=True, output_file=None):
     driver = setup_webdriver(headless=headless)
     
     try:
-        mpn_search = MurataMPNSearch()
+        mpn_search =  TdkMpnSearch() #MurataMPNSearch()
         results  = mpn_search.get_products_by_number(mpn)
         
         if output_file and results:

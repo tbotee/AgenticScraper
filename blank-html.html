@@ -1,0 +1,565 @@
+<div class="unit_info_and_pages">
+    <ul class="icon_set01 comparison_button">
+    <li>
+        <a href="javascript:void(0);" class="icon_text color01 comparison">Compare</a>&nbsp;<span id="comparison_button_help" class="icon_help_ver1 icon_help_10">?</span>
+    </li>
+</ul>
+
+                                
+        <ul class="icon_set01">
+            <li>
+                                    <a href="javascript:void(0)" data-column_group_name="catalog" class="icon_text selected_doc_dl download" >Catalog / Data Sheet&nbsp;<i class="fas fa-download fa-lg"></i></a>
+                                </li>
+        </ul>
+                                                                                                                                                                                                                                        
+        <ul class="icon_set01">
+            <li>
+                                    <a href="javascript:void(0)" data-column_group_name="simmodel" class="icon_text selected_doc_dl download" >Simulation Model&nbsp;<i class="fas fa-download fa-lg"></i></a>
+                                </li>
+        </ul>
+                <span id="download_button_help" class="icon_help_ver1 icon_help_12">?</span>
+    <div class="csv_pages">
+    
+    <select name="lines">
+    <option value="20" >20</option>
+    <option value="50" >50</option>
+    <option value="100" >100</option>
+</select>
+
+
+    <ul class="pagenum">
+
+        <li>
+    
+                            <a href="javascript:void(0);" class="on"> 1 </a>
+        
+    
+    </li>
+
+
+
+    </ul>
+    
+
+
+            <a class="icon_text color05 csv" href="/pdc_api/en/search/list.csv">CSV&nbsp;<i class="fas fa-download fa-lg"></i></a>&nbsp;<span id="csv_button_help" class="icon_help_ver1 icon_help_12">?</span>
+        </div>
+
+</div>
+
+
+
+<table id="table_result" class="inlineTableSP table_result text11" >
+
+<thead>
+    <tr class="">
+                
+            <th id="check" class="" style="width:50px;">
+    
+
+    Check
+
+            </th>
+                
+            <th id="catalog" class="" style="width:55px;">
+    
+
+    Catalog / Data Sheet
+
+            <span id="catalog_help" class="icon_help_ver2" data-help_id="catalog_help">?</span>
+            </th>
+                
+            <th id="image" class="" style="width:50px;">
+    
+
+    Images
+
+            </th>
+                
+            <th id="part_no" class="" style="width:195px;">
+    
+
+    Part No.
+
+            <span id="part_no_help" class="icon_help_ver2" data-help_id="part_no_help">?</span>
+            </th>
+                                    
+            <th id="pure_status" class="" style="width:95px;">
+    
+
+    Status
+
+            </th>
+                
+            <th id="inventory" class="" style="width:68px;">
+    
+
+    Distributor Inventory
+
+            </th>
+                
+            <th id="brand" class="" style="width:75px;">
+    
+
+    Brand
+
+            </th>
+                
+            <th id="1apps" class="" style="width:50px;">
+    
+
+    Apps.
+
+            <span id="1apps_help" class="icon_help_ver2" data-help_id="1apps_help">?</span>
+            </th>
+                
+            <th id="1feature" class="" style="width:75px;">
+    
+
+    Feature
+
+            <span id="1feature_help" class="icon_help_ver2" data-help_id="1feature_help">?</span>
+            </th>
+                
+            <th id="lw" class="" style="width:90px;">
+    
+
+    L x W Size
+
+            </th>
+                
+            <th id="t_max" class="" style="width:60px;">
+    
+
+    T(Max.) / mm
+
+            </th>
+                
+            <th id="1cap" class="" style="width:70px;">
+    
+
+    Capacitance
+
+            </th>
+                
+            <th id="1captol" class="" style="width:60px;">
+    
+
+    Tolerance
+
+            </th>
+                
+            <th id="1dcrv" class="" style="width:60px;">
+    
+
+    Rated Voltage [DC] / V
+
+            </th>
+                
+            <th id="1tc_sbl" class="" style="width:60px;">
+    
+
+    Temp. Chara.
+
+            <span id="1tc_sbl_help" class="icon_help_ver2" data-help_id="1tc_sbl_help">?</span>
+            </th>
+                
+            <th id="opetemp" class="" style="width:70px;">
+    
+
+    Operating Temp. Range / °C
+
+            </th>
+                
+            <th id="captempchg" class="" style="width:80px;">
+    
+
+    Cap.Change or Temp.Coef.
+
+            </th>
+                
+            <th id="aec_q200" class="" style="width:50px;">
+    
+
+    AEC-<br />
+Q200
+
+            </th>
+                
+            <th id="simmodel" class="" style="width:60px;">
+    
+
+    Simulation Model
+
+            <span id="simmodel_help" class="icon_help_ver2" data-help_id="simmodel_help">?</span>
+            </th>
+</tr>
+
+    <tr class="soat">
+            <td>
+
+
+            <input type="checkbox" id="allCheck" value="" name="">
+        
+        </td>
+            <td>
+
+
+        
+        </td>
+            <td>
+
+
+        
+        </td>
+            <td>
+
+
+        
+            <a id="part_no-part_no_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="part_no-part_no_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+                                <td>
+
+
+        
+            <a id="pure_status-pure_status_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="pure_status-pure_status_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn_on.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+        </td>
+            <td>
+
+
+        
+            <a id="brand-brand_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="brand-brand_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1apps-1apps_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1apps-1apps_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1feature-1feature_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1feature-1feature_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="lw-lw_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="lw-lw_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="t_max-t_max_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="t_max-t_max_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1cap-1cap_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1cap-1cap_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1captol-1captol_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1captol-1captol_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1dcrv-1dcrv_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1dcrv-1dcrv_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="1tc_sbl-1tc_sbl_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="1tc_sbl-1tc_sbl_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="opetemp-opetemp_min_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="opetemp-opetemp_min_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="captempchg-captempchg_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="captempchg-captempchg_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+            <a id="aec_q200-aec_q200_sort_down" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_down_btn.gif">
+                </a>
+
+    <a id="aec_q200-aec_q200_sort_up" href="#">
+                    <img class="" width="19" height="14" alt="" src="/search/img/sort_up_btn.gif">
+                    
+    </a>
+        </td>
+            <td>
+
+
+        
+        </td>
+</tr>
+
+</thead>
+<tbody>
+    <tr class="listBottr01">
+                    
+
+<td class="  hide_label_sp" data-label="Check">
+    <input type="checkbox" class="allCheckTarget" value="1000000479761" name="check" id="result_chk_1000000479761">
+</td>
+                    
+
+<td class=" doc_icon hide_label_sp" data-label="Catalog / Data Sheet">
+    <a id="pid_1000000479761_asset_1000000674195" name="1000000479761_catalog" data-dam_asset_id="3dfabbe8-8d47-4c03-9ded-3713b26f692e"  data-disclaimer_action="download" class="download_icon " alt="Catalog" href="/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf" target="_blank"><img class="download_icon_img" title="Catalog" alt="Catalog" src="/search-template/common/img/pdf.gif"></a><a id="pid_1000000479761_asset_1000000703701" name="1000000479761_catalog" data-dam_asset_id="c7052864-7cb4-4e9f-9513-08578be73c2d"  data-disclaimer_action="download" class="download_icon " alt="Characterization Sheet" href="/system/files/dam/doc/product/capacitor/ceramic/mlcc/charasheet/c0402c0g1c100d020bc.pdf" target="_blank"><img class="download_icon_img" title="Characterization Sheet" alt="Characterization Sheet" src="/search-template/common/img/pdf_datasheet.gif"></a>
+</td>
+                    
+
+<td class=" list_image hide_label_sp" data-label="Images">
+    <img alt="" src="/system/files/dam/img/product/capacitor/ceramic/mlcc/010101_c0402-g_pi0801s.png" width=40px><div class="img_l"><img src="/system/files/dam/img/product/capacitor/ceramic/mlcc/010101_c0402-g_pi0801.png">Images are for reference only and show example products.</div>
+</td>
+                    
+
+<td class=" parts_number comparison_no_red hide_label_sp" data-label="Part No.">
+    <span style="display: none;" class="spOnly production">Production</span><img  src="/search-template/common/img/status_production.gif" alt="Production" title="The product is in volume production." class="pcOnly"><br><a target="_blank" href="/en/search/capacitor/ceramic/mlcc/info?part_no=C0402C0G1C100D020BC">C0402C0G1C100D020BC</a>
+</td>
+                                        
+
+<td class=" " data-label="Status">
+    Production
+</td>
+                    
+
+<td class=" inventory hide_label_sp" data-label="Distributor Inventory">
+    <a class="icon_stock buy_now"  onclick="getIpAddress('https://dilp.netcomponents.com/cgi-bin/tdkcorp.asp?lang=en&mode=1&partnumber1=C0402C0G1C100D020BC', null, this)">Buy Now</a><input type="hidden" value="https://dilp.netcomponents.com/cgi-bin/tdkcorp.asp?lang=en&mode=1&partnumber1=C0402C0G1C100D020BC">
+</td>
+                    
+
+<td class=" " data-label="Brand">
+    TDK
+</td>
+                    
+
+<td class=" " data-label="Apps.">
+    <span class="spOnly">Commercial Grade</span><img alt="Commercial Grade" src="/search-template/common/img/apps_commercial01.gif" class="pcOnly">
+</td>
+                    
+
+<td class=" feature" data-label="Feature">
+    <span class="icon_text color01 w60">General</span>
+</td>
+                    
+
+<td class=" " data-label="L x W Size">
+    0.4mm x 0.2mm [EIA 01005]
+</td>
+                    
+
+<td class=" " data-label="T(Max.) / mm">
+    0.22
+</td>
+                    
+
+<td class=" " data-label="Capacitance">
+    10pF
+</td>
+                    
+
+<td class=" " data-label="Tolerance">
+    ±0.5pF
+</td>
+                    
+
+<td class=" " data-label="Rated Voltage [DC] / V">
+    16
+</td>
+                    
+
+<td class=" " data-label="Temp. Chara.">
+    C0G
+</td>
+                    
+
+<td class=" " data-label="Operating Temp. Range / °C">
+    -55 to 125
+</td>
+                    
+
+<td class=" " data-label="Cap.Change or Temp.Coef.">
+    0±30ppm/°C
+</td>
+                    
+
+<td class=" " data-label="AEC-
+Q200">
+    
+</td>
+                    
+
+<td class=" hide_sp" data-label="Simulation Model">
+    <a id="pid_1000000479761_asset_1000000617910" name="1000000479761_simmodel" data-dam_asset_id="73353e7f-9b4f-411a-9483-baac4ee3b1bb" data-disclaimer_id="tdk-ts01" data-disclaimer_action="download" class="download_icon is_need_to_disclaimer_agree" alt="S-parameter" href="/system/files/dam/tvcl/capacitor/ceramic/mlcc/spara/commercial_general/c0402/c0402c0g1c100d020bc.s2p" target="_blank"><img class="download_icon_img" title="S-parameter" alt="S-parameter" src="/search-template/common/img/icon_spara.gif"></a><a id="pid_1000000479761_asset_1000000617912" name="1000000479761_simmodel" data-dam_asset_id="59a45ca9-c8e1-4b8c-8daa-299ee0aa467f" data-disclaimer_id="tdk-ts01" data-disclaimer_action="download" class="download_icon is_need_to_disclaimer_agree" alt="SPICE Netlist (Simple)" href="/system/files/dam/tvcl/capacitor/ceramic/mlcc/spice_s/commercial_general/c0402/c0402c0g1c100d020bc_s.mod" target="_blank"><img class="download_icon_img" title="SPICE Netlist (Simple)" alt="SPICE Netlist (Simple)" src="/search-template/common/img/icon_netlist_s.gif"></a><a id="pid_1000000479761_asset_1000000617911" name="1000000479761_simmodel" data-dam_asset_id="6755290f-66ce-4faf-9d42-904d594afddf" data-disclaimer_id="tdk-ts01" data-disclaimer_action="download" class="download_icon is_need_to_disclaimer_agree" alt="SPICE Netlist (Precision)" href="/system/files/dam/tvcl/capacitor/ceramic/mlcc/spice_p/commercial_general/c0402/c0402c0g1c100d020bc_p.mod" target="_blank"><img class="download_icon_img" title="SPICE Netlist (Precision)" alt="SPICE Netlist (Precision)" src="/search-template/common/img/icon_netlist_p.gif"></a>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<div class="unit_info_and_pages">
+    <ul class="icon_set01 comparison_button">
+    <li>
+        <a href="javascript:void(0);" class="icon_text color01 comparison">Compare</a>&nbsp;<span id="comparison_button_help" class="icon_help_ver1 icon_help_10">?</span>
+    </li>
+</ul>
+
+                                
+        <ul class="icon_set01">
+            <li>
+                                    <a href="javascript:void(0)" data-column_group_name="catalog" class="icon_text selected_doc_dl download" >Catalog / Data Sheet&nbsp;<i class="fas fa-download fa-lg"></i></a>
+                                </li>
+        </ul>
+                                                                                                                                                                                                                                        
+        <ul class="icon_set01">
+            <li>
+                                    <a href="javascript:void(0)" data-column_group_name="simmodel" class="icon_text selected_doc_dl download" >Simulation Model&nbsp;<i class="fas fa-download fa-lg"></i></a>
+                                </li>
+        </ul>
+                <span id="download_button_help" class="icon_help_ver1 icon_help_12">?</span>
+    <div class="csv_pages">
+    
+    <select name="lines">
+    <option value="20" >20</option>
+    <option value="50" >50</option>
+    <option value="100" >100</option>
+</select>
+
+
+    <ul class="pagenum">
+
+        <li>
+    
+                            <a href="javascript:void(0);" class="on"> 1 </a>
+        
+    
+    </li>
+
+
+
+    </ul>
+    
+
+
+            <a class="icon_text color05 csv" href="/pdc_api/en/search/list.csv">CSV&nbsp;<i class="fas fa-download fa-lg"></i></a>&nbsp;<span id="csv_button_help" class="icon_help_ver1 icon_help_12">?</span>
+        </div>
+
+</div>
+
+
+
+<form id="download_zip"></form>
+<input type="hidden" id="dam_assets_temp">

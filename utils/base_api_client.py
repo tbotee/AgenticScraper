@@ -30,7 +30,7 @@ class BaseAPIClient:
             "Accept": "application/json, text/plain, */*"
         }
 
-    def get(self, endpoint, params=None):
+    def get(self, endpoint, params=None, json=True):
         """
         Make a GET request to the API.
         Args:
@@ -40,6 +40,7 @@ class BaseAPIClient:
             dict: The JSON response from the API
         """
         url = self.base_url + endpoint
+        self.logger.info(f"Fetching: {url}")
         try:
             response = requests.get(url, headers=self.default_headers(), params=params)
             if os.getenv('USE_PROXY') == 'true':
@@ -50,6 +51,28 @@ class BaseAPIClient:
                 response = requests.get(url, headers=self.default_headers(), params=params, proxies=proxies)
             else:
                 response = requests.get(url, headers=self.default_headers(), params=params)
+            response.raise_for_status()
+            if json:
+                return response.json()
+            else:
+                return response.text
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f"Request failed: {e}")
+            return None
+        
+    def post(self, endpoint, data=None):
+        """
+        Make a POST request to the API.
+
+        Args:
+            endpoint (str): The endpoint to request
+            data (dict, optional): The data to send with the request
+        Returns:
+            dict: The JSON response from the API
+        """
+        url = self.base_url + endpoint
+        try:
+            response = requests.post(url, headers=self.default_headers(), json=data)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
