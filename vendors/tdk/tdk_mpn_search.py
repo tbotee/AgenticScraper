@@ -44,16 +44,16 @@ class TdkMpnSearch(MPNBase, BaseAPIClient):
         soup = BeautifulSoup(response_html, 'html.parser')
         content = soup.find('div', class_='unit_l')
 
-        products = {}
+        product = {}
 
-        parse_product = self._parse_table(content, 'dimension', products)
-        parse_product = self._parse_table(content, 'electrical_characteristics', parse_product)
-        parse_product = self._parse_table(content, 'other', parse_product)
+        self._parse_table(content, 'dimension', product)
+        self._parse_table(content, 'electrical_characteristics', product)
+        self._parse_table(content, 'other', product)
 
-        return parse_product
+        return product
 
     def _parse_table(self, soup: BeautifulSoup, table_class: str, products: dict) -> dict:
-        table = soup.find('table', class_=['spec_table', table_class])
+        table = soup.select_one(f'table.spec_table.{table_class}')
         for row in table.find_all('tr'):
             name_cell = row.find('td', class_='name')
             value_cell = row.find('td', class_='value')
@@ -61,6 +61,7 @@ class TdkMpnSearch(MPNBase, BaseAPIClient):
             if name_cell and value_cell:
                 name = name_cell.get_text(strip=True)
                 key = self._clean_key(name)
+                self.logger.info(f"Key: {key}")
                 value = value_cell.find('dt').get_text(strip=True)
                 products[key] = value
         return products
