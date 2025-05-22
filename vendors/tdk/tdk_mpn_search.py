@@ -61,7 +61,6 @@ class TdkMpnSearch(MPNBase, BaseAPIClient):
             if name_cell and value_cell:
                 name = name_cell.get_text(strip=True)
                 key = self._clean_key(name)
-                self.logger.info(f"Key: {key}")
                 value = value_cell.find('dt').get_text(strip=True)
                 products[key] = value
         return products
