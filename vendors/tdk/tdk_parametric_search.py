@@ -107,15 +107,15 @@ class TdkParametricSearch(ParametricBase, Gemini):
             if not table:
                 self.logger.warning("No product table found")
                 return products
-                
+
             # Get headers
             headers = []
             header_row = table.find('thead').find('tr')
             for th in header_row.find_all('th'):
                 # Get the header text, removing any help icons
-                header_text = th.get_text(strip=True)
-                if header_text:
-                    headers.append(header_text)
+                header_id = th.get('id')
+                if header_id:
+                    headers.append(header_id)
             
             # Process each row
             for row in table.find('tbody').find_all('tr', {'class': 'listBottr01'}):
@@ -133,7 +133,7 @@ class TdkParametricSearch(ParametricBase, Gemini):
                         cell_text = cell.get_text(strip=True)
                         
                         # Handle special cases for certain columns
-                        if headers[i] == 'Part No.':
+                        if headers[i] == 'part_no':
                             # Get the part number from the link
                             part_link = cell.find('a')
                             if part_link:
