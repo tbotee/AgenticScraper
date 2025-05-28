@@ -39,21 +39,21 @@ class TdkParametricSearch(ParametricBase, Gemini):
         """
         try:   
             
-            # categories = self._get_categories()
-            # search_page_url = self._get_category_page(category, subcategory, categories)
+            categories = self._get_categories()
+            search_page_url = self._get_category_page(category, subcategory, categories)
 
-            # search_page_url = "https://product.tdk.com/en/search/emc/emc/3tf/characteristic"
+            search_page_url = "https://product.tdk.com/en/search/emc/emc/3tf/characteristic"
 
-            # form_data = self._serialize_form(search_page_url)
+            form_data = self._serialize_form(search_page_url)
 
-            # if len(form_data) == 0:
-            #     self.logger.error("No form data found")
-            #     return []
+            if len(form_data) == 0:
+                self.logger.error("No form data found")
+                return []
 
-            # arguments = self._get_arguments(form_data, parameters)
+            arguments = self._get_arguments(form_data, parameters)
 
-            # products = self._get_products(search_page_url, arguments, max_results)
-            products = self._get_products('https://product.tdk.com/en/search/emc/emc/3tf/list#ref=characteristic&3rvdct=33&3ilt=35&3ilFreqMint=2000&_l=10&_p=1&_c=pure_status-pure_status&_d=0', [], max_results)
+            products = self._get_products(search_page_url, arguments, max_results)
+            # products = self._get_products('https://product.tdk.com/en/search/emc/emc/3tf/list#ref=characteristic&3rvdct=33&3ilt=35&3ilFreqMint=2000&_l=10&_p=1&_c=pure_status-pure_status&_d=0', [], max_results)
 
             return products
             
