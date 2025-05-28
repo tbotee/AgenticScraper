@@ -8,6 +8,7 @@ from utils.logger import get_logger
 from vendors.murata.murata_parametric_search import MurataParametricSearch
 from vendors.murata.murata_xref_search import MurataXrefSearch
 from vendors.tdk.tdk_mpn_search import TdkMpnSearch
+from vendors.tdk.tdk_parametric_search import TdkParametricSearch
 
 # Import these after candidates create their implementation
 # Replace "example_vendor" with the name of their vendor module
@@ -30,7 +31,8 @@ def search_by_mpn(mpn, headless=True, output_file=None):
     driver = setup_webdriver(headless=headless)
     
     try:
-        mpn_search =  TdkMpnSearch() #MurataMPNSearch()
+        mpn_search =  MurataMPNSearch()
+        #mpn_search =  TdkMpnSearch() #MurataMPNSearch()
         results  = mpn_search.get_products_by_number(mpn)
         
         if output_file and results:
@@ -73,7 +75,8 @@ def search_by_parameters(category, subcategory=None, parameters=None, max_result
         # search_engine = ExampleParametricSearch(driver)
         # results = search_engine.search_by_parameters(category, subcategory, parameters, max_results)
 
-        parametric_search = MurataParametricSearch()
+        #parametric_search = MurataParametricSearch()
+        parametric_search = TdkParametricSearch()
         results = parametric_search.search_by_parameters(category, subcategory, parameters, max_results)
         
         # # Save results if output file specified
