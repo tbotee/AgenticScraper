@@ -42,7 +42,7 @@ class TdkParametricSearch(ParametricBase, Gemini):
             categories = self._get_categories()
             search_page_url = self._get_category_page(category, subcategory, categories)
 
-            search_page_url = "https://product.tdk.com/en/search/emc/emc/3tf/characteristic"
+            #search_page_url = "https://product.tdk.com/en/search/emc/emc/3tf/characteristic"
 
             form_data = self._serialize_form(search_page_url)
 
@@ -335,7 +335,6 @@ class TdkParametricSearch(ParametricBase, Gemini):
         
         return categories
         
-
     @cache_json_result(cache_dir="llm_cache")
     def _get_categories(self) -> List[Dict[str, str]]:
         """
